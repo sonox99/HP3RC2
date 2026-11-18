@@ -1,7 +1,7 @@
 [CmdletBinding()]
 param([string]$ProjectRoot = 'F:\PS2RC-HP3')
 $ErrorActionPreference = 'Stop'
-$SourceRoot = Join-Path $ProjectRoot 'source\pcsx2-instrumented\pcsx'
+$SourceRoot = Join-Path $ProjectRoot 'source\pcsx2-instrumented\pcsx2'
 $Required = @('VU1microInterp.cpp','x86\microVU.cpp','x86\microVU.h','MTVU.cpp','MTVU.h','VUmicro.cpp','VUmicro.h','VU.h')
 $Checks = New-Object System.Collections.Generic.List[object]
 function Add-Check([string]$Name,[bool]$Passed,[string]$Detail) {
