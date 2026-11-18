@@ -13,6 +13,7 @@
 #include <cstdlib>
 #include <cstring>
 #include <filesystem>
+#include <functional>
 #include <string>
 #include <thread>
 
@@ -24,6 +25,8 @@ struct CaptureContext
 	u32 asset_ref_id = 0;
 	u32 batch_id = 0;
 };
+
+inline thread_local CaptureContext s_context{};
 
 class ScopedCaptureContext
 {
@@ -103,7 +106,6 @@ private:
 	size_t m_used = 0;
 };
 
-inline thread_local CaptureContext s_context{};
 inline thread_local ThreadWriter s_writer{};
 
 inline void RecordInterpreter(u32 pc, u32 lower, u32 upper, u64 cycle)
