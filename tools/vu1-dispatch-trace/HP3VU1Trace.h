@@ -9,9 +9,9 @@
 #if HP3_VU1_TRACE
 
 #include <array>
-#include <chrono>
 #include <cstdio>
 #include <cstdlib>
+#include <cstring>
 #include <filesystem>
 #include <string>
 #include <thread>
@@ -116,7 +116,7 @@ inline void RecordInterpreter(u32 pc, u32 lower, u32 upper, u64 cycle)
 		"interp,%u,%u,%u,%08X,%08X,%08X,%llu\n",
 		s_context.id, s_context.asset_ref_id, s_context.batch_id, pc, lower, upper,
 		static_cast<unsigned long long>(cycle));
-	if (length > 0)
+	if (length > 0 && static_cast<size_t>(length) < sizeof(line))
 		s_writer.Write(line, static_cast<size_t>(length));
 }
 
@@ -130,7 +130,7 @@ inline void RecordMicroVUDispatch(u32 start_pc, u32 cycles, u64 elapsed_ns)
 		"microVU,%u,%u,%u,%08X,%u,%llu\n",
 		s_context.id, s_context.asset_ref_id, s_context.batch_id, start_pc, cycles,
 		static_cast<unsigned long long>(elapsed_ns));
-	if (length > 0)
+	if (length > 0 && static_cast<size_t>(length) < sizeof(line))
 		s_writer.Write(line, static_cast<size_t>(length));
 }
 } // namespace HP3VU1Trace
