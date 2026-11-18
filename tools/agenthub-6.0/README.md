@@ -1,23 +1,30 @@
 # AgentHub 6.0 Clean
 
-AgentHub 6.0 is published here as a standalone HP3RC2 tool. Existing HP3RC2 tools and files are left unchanged.
+AgentHub 6.0 is provided here as a standalone tool inside HP3RC2. Existing HP3RC2 tools remain untouched.
 
-## One-time package publish
+## Publish the ZIP
 
-The ChatGPT GitHub connection can commit source text but cannot upload binary release assets. To place the ZIP in this repository, download `PS2RC-AgentHub-6.0-Clean.zip` from the conversation and run this script locally:
+Download `PS2RC-AgentHub-6.0-Clean.zip` from the ChatGPT conversation and save it in Downloads. Then run:
 
 ```powershell
-.\publish-archive.ps1 -ZipPath "$HOME\Downloads\PS2RC-AgentHub-6.0-Clean.zip"
+irm https://raw.githubusercontent.com/sonox99/HP3RC2/main/tools/agenthub-6.0/publish-archive.ps1 -OutFile "$env:TEMP\publish-agenthub6.ps1"
+& "$env:TEMP\publish-agenthub6.ps1" -ZipPath "$HOME\Downloads\PS2RC-AgentHub-6.0-Clean.zip"
 ```
 
-The script uses your local Git credential manager; it does not ask for or store a GitHub token.
+The publisher checks the archive SHA-256 before copying or pushing it. It uses the local Git Credential Manager and does not store a GitHub token.
 
-## Install after the archive has been published
+## Install after the ZIP is published
 
 ```powershell
 irm https://raw.githubusercontent.com/sonox99/HP3RC2/main/tools/agenthub-6.0/install.ps1 | iex
 ```
 
-Default install path: `F:\AI\PS2RC-AgentHub-6.0`. Set `$env:AGENTHUB6_INSTALL_ROOT` to choose another path. Existing installations are not overwritten.
+Default install path: `F:\AI\PS2RC-AgentHub-6.0`. Set `$env:AGENTHUB6_INSTALL_ROOT` to choose another path. Existing target folders are never overwritten.
 
-The installer verifies SHA-256 `7330b9c47e4c5ca894ee0422fbd5a206067fc8611e9bf79b8ee8d28803761072` before extracting the ZIP.
+## Package integrity
+
+SHA-256: `15064252d36e2da68b4301190ebe645a57ba6ad13318a04be7c097f6f051ce25`
+
+The installer verifies this hash before extracting the archive. The ZIP was checked for archive integrity and contains the expected top-level folder `PS2RC-AgentHub-6.0/`.
+
+For Ollama tuning, review and run `scripts/Configure-Ollama-6.ps1` separately on Main and Worker. Check local model names and endpoint addresses before production use.
