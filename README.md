@@ -2,33 +2,21 @@
 
 Tools and diagnostics for the HP3 / PS2RC workstream.
 
-## HP3 VU1 Dispatch Trace (experimental)
+## HP3 VU1 Dispatch Trace
 
-Path: `tools/vu1-dispatch-trace/Apply-HP3-VU1-DispatchTrace.ps1`
+- Experimental first attempt: tools/vu1-dispatch-trace/Apply-HP3-VU1-DispatchTrace.ps1
+- Safe v2 preparation: branch feature/hp3-vu1-trace-v2
+- Design gate: docs/HP3-VU1-TRACE-V2.md
+- Read-only preflight: tools/vu1-dispatch-trace/Test-HP3-VU1TracePrerequisites.ps1
 
-This patcher is **experimental and unverified**. It has not been compiled against the target PCSX2 source tree. It uses exact-once source-text anchors and aborts if any expected anchor is missing or duplicated. Review the script and source diff before applying it.
+The experimental first attempt is not approved for use. The v2 branch does not yet modify PCSX2 source. It adds a read-only source/worktree preflight and records requirements that must be met before a compile-tested patch is published.
 
-### Download and inspect (Windows PowerShell 5.1)
+### Run the preflight (Windows PowerShell 5.1)
 
-```powershell
-$script = Join-Path $env:TEMP 'Apply-HP3-VU1-DispatchTrace.ps1'
-Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/sonox99/HP3RC2/main/tools/vu1-dispatch-trace/Apply-HP3-VU1-DispatchTrace.ps1' -OutFile $script
-Get-FileHash -Algorithm SHA256 $script
-Get-Content $script
-```
+~~~powershell
+$script = Join-Path $env:TEMP 'Test-HP3-VU1TracePrerequisites.ps1'; Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/sonox99/HP3RC2/feature/hp3-vu1-trace-v2/tools/vu1-dispatch-trace/Test-HP3-VU1TracePrerequisites.ps1' -OutFile $script; Get-FileHash -Algorithm SHA256 $script; & $script -ProjectRoot 'F:\PS2RC-HP3'
+~~~
 
-Run the dry-run first:
+The preflight only reads source files and Git status. It does not create backups, edit files, build PCSX2, or launch the emulator.
 
-```powershell
-& $script -ProjectRoot 'F:\PS2RC-HP3' -WhatIf
-```
-
-Only after reviewing the proposed changes and confirming the source tree is backed up, apply:
-
-```powershell
-& $script -ProjectRoot 'F:\PS2RC-HP3'
-```
-
-The patcher creates backups under `reports\vu1-dispatch-hook-backup-<timestamp>`. It does not build PCSX2 or start the emulator.
-
-**Important:** The VU1 trace requires VU1 Interpreter mode. No successful build or runtime validation is claimed.
+No successful build or runtime validation is claimed.
